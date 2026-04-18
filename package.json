@@ -31,6 +31,10 @@
     "svelte-check": "^4.4.6",
     "typescript": "^6.0.2",
     "typescript-eslint": "^8.58.1",
-    "vite": "^8.0.7"
+    "vite": "^8.0.7",
+    "vite-plugin-cesium-build": "^0.7.4"
+  },
+  "dependencies": {
+    "cesium": "^1.140.0"
   }
 }

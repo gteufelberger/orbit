@@ -1,4 +1,5 @@
-<h1>Welcome to SvelteKit</h1>
-<p>
-  Hello, World!
-</p>
+<script>
+  import CesiumViewer from "$lib/CesiumViewer.svelte";
+</script>
+
+<CesiumViewer />
