@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build",
+    "build:wasm": "wasm-pack build orbit_lib --target web --out-dir ../src/lib/wasm/pkg",
+    "build": "bun run build:wasm && vite build",
     "preview": "vite preview",
     "prepare": "svelte-kit sync || echo ''",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -32,7 +33,8 @@
     "typescript": "^6.0.2",
     "typescript-eslint": "^8.58.1",
     "vite": "^8.0.7",
-    "vite-plugin-cesium-build": "^0.7.4"
+    "vite-plugin-cesium-build": "^0.7.4",
+    "wasm-pack": "^0.14.0"
   },
   "dependencies": {
     "cesium": "^1.140.0"

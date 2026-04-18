@@ -8,6 +8,10 @@ node_modules
 /.svelte-kit
 /build
 
+# WASM
+/src/lib/wasm/pkg
+orbit_lib/target
+
 # OS
 .DS_Store
 Thumbs.db
