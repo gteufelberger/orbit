@@ -5,12 +5,24 @@
 
   let container: HTMLDivElement;
   let viewer: Cesium.Viewer;
+  let lastClockTime: Cesium.JulianDate | null = null;
 
   onMount(() => {
     if (!container) return;
 
     // Initialize Cesium Viewer
     viewer = new Cesium.Viewer(container, {});
+
+    // Animate on clock changes
+    viewer.clock.onTick.addEventListener(() => {
+      if (
+        !lastClockTime ||
+        !Cesium.JulianDate.equals(lastClockTime, viewer.clock.currentTime)
+      ) {
+        animate();
+        lastClockTime = Cesium.JulianDate.clone(viewer.clock.currentTime);
+      }
+    });
 
     return () => {
       // Cleanup on unmount
@@ -19,6 +31,10 @@
       }
     };
   });
+
+  function animate() {
+    // Placeholder
+  }
 </script>
 
 <div bind:this={container} class="cesium-container"></div>
