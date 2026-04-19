@@ -13,3 +13,13 @@ jobs:
         run: bun install
       - name: Check formatting
         run: bun run lint
+
+  rust:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Formatting
+        run: cargo fmt --manifest-path orbit_lib/Cargo.toml -- --check
+
+      - name: Clippy
+        run: cargo clippy --manifest-path orbit_lib/Cargo.toml -- --no-deps --deny warnings
