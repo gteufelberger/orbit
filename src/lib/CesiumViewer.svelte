@@ -20,7 +20,7 @@
         !lastClockTime ||
         !Cesium.JulianDate.equals(lastClockTime, currentTime)
       ) {
-        animate();
+        animate(currentTime);
         lastClockTime = Cesium.JulianDate.clone(currentTime);
       }
     });
@@ -33,8 +33,8 @@
     };
   });
 
-  function animate() {
-    // Placeholder
+  function animate(currentTime: Cesium.JulianDate) {
+    console.log(currentTime);
   }
 </script>
 
