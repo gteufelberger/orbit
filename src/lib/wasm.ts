@@ -2,7 +2,7 @@ export async function getWasm(): Promise<OrbitWasmModule> {
   try {
     const wasm = await import("./wasm/pkg/orbit_wasm.js");
     await wasm.default();
-    return wasm as unknown as OrbitWasmModule;
+    return wasm as OrbitWasmModule;
   } catch (error) {
     alert("Failed to import WASM module");
     throw error;
