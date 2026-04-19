@@ -1,23 +1,18 @@
 <script lang="ts">
-  import { add, helloWorld } from "./wasm";
+  // import { add, helloWorld } from "./wasm";
+  import { getWasm, type OrbitWasmModule } from "./wasm";
 
-  async function callWasmAdd() {
-    try {
-      const result = await add(2, 2);
-      alert(result);
-    } catch (err) {
-      console.error("WASM call failed:", err);
-    }
-  }
-  async function callWasmHelloWorld() {
-    try {
-      const result = await helloWorld();
-      alert(result);
-    } catch (err) {
-      console.error("WASM call failed:", err);
-    }
-  }
+  let wasm_module: OrbitWasmModule | null;
+  $effect(() => {
+    (async () => {
+      wasm_module = await getWasm();
+    })();
+  });
 </script>
 
-<button onclick={callWasmAdd}> Call WASM add Function </button>
-<button onclick={callWasmHelloWorld}> Call WASM hello_world Function </button>
+<button onclick={() => alert(wasm_module!.add(2, 2))}>
+  Call WASM add Function
+</button>
+<button onclick={() => alert(wasm_module!.hello_world())}>
+  Call WASM hello_world Function
+</button>
