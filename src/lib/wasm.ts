@@ -1,29 +1,25 @@
-let wasmInitialized = false;
+let wasmModule: OrbitWasmModule | null = null;
 
-async function initWasm() {
-  if (wasmInitialized) {
-    return;
-  }
+export async function initWasm(): Promise<void> {
+  // Return early if already set up
+  if (wasmModule) return;
 
-  try {
-    // Import the WASM module and call its default init function
-    const { default: init } = await import("./wasm/pkg/orbit_wasm.js");
-    await init();
-    wasmInitialized = true;
-  } catch (error) {
-    console.error("Failed to load WASM module:", error);
-    throw error;
-  }
+  const wasm = await import("./wasm/pkg/orbit_wasm.js");
+  await wasm.default();
+  wasmModule = wasm as unknown as OrbitWasmModule;
 }
 
 export async function helloWorld(): Promise<string> {
   await initWasm();
-  const { hello_world } = await import("./wasm/pkg/orbit_wasm.js");
-  return hello_world();
+  return wasmModule!.hello_world();
 }
 
 export async function add(a: number, b: number): Promise<number> {
   await initWasm();
-  const { add: addFn } = await import("./wasm/pkg/orbit_wasm.js");
-  return addFn(a, b);
+  return wasmModule!.add(a, b);
+}
+
+interface OrbitWasmModule {
+  add: (a: number, b: number) => number;
+  hello_world: () => string;
 }
