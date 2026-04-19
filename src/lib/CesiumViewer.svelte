@@ -15,12 +15,13 @@
 
     // Animate on clock changes
     viewer.clock.onTick.addEventListener(() => {
+      const currentTime = viewer.clock.currentTime;
       if (
         !lastClockTime ||
-        !Cesium.JulianDate.equals(lastClockTime, viewer.clock.currentTime)
+        !Cesium.JulianDate.equals(lastClockTime, currentTime)
       ) {
         animate();
-        lastClockTime = Cesium.JulianDate.clone(viewer.clock.currentTime);
+        lastClockTime = Cesium.JulianDate.clone(currentTime);
       }
     });
 
