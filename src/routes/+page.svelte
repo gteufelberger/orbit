@@ -27,6 +27,12 @@
 
 <div class="split-container">
   <div style={`width: ${leftSidebarWidth}px`}>
+    <a
+      class="source-link"
+      href="https://github.com/gteufelberger/orbit"
+      target="_blank"
+      rel="noopener noreferrer">Source</a
+    >
     <Controls />
   </div>
   <!-- svelte-ignore a11y_no_static_element_interactions -->
