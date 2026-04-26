@@ -4,6 +4,7 @@
 
   let leftSidebarWidth = $state(150);
   let isDragging = $state(false);
+  let inertialMode = $state(false);
 
   function handleMouseDown(): void {
     isDragging = true;
@@ -33,12 +34,16 @@
       target="_blank"
       rel="noopener noreferrer">Source</a
     >
-    <Controls />
+    <br />
+    <Controls
+      {inertialMode}
+      onToggleInertialMode={() => (inertialMode = !inertialMode)}
+    />
   </div>
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div class="divider" onmousedown={handleMouseDown}></div>
   <div class="viewer-pane">
-    <CesiumViewer />
+    <CesiumViewer {inertialMode} />
   </div>
 </div>
 

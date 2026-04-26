@@ -12,9 +12,27 @@ export async function getWasm(): Promise<OrbitWasmModule> {
 export interface OrbitWasmModule {
   add: (a: number, b: number) => number;
   hello_world: () => string;
-  calculate_satellite_position: (
-    time_seconds: number,
-    orbital_period: number,
-    orbital_radius: number,
+  orbital_period: (semi_major_axis: number) => number;
+  calculate_position_keplerian: (
+    semi_major_axis: number,
+    eccentricity: number,
+    inclination: number,
+    raan: number,
+    arg_periapsis: number,
+    mean_anomaly_epoch: number,
+    epoch_unix: number,
+    time_unix: number,
+  ) => number[];
+  calculate_orbit_path: (
+    semi_major_axis: number,
+    eccentricity: number,
+    inclination: number,
+    raan: number,
+    arg_periapsis: number,
+    mean_anomaly_epoch: number,
+    epoch_unix: number,
+    time_unix: number,
+    num_points: number,
+    inertial: boolean,
   ) => number[];
 }
