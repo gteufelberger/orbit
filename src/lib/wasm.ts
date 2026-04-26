@@ -12,4 +12,9 @@ export async function getWasm(): Promise<OrbitWasmModule> {
 export interface OrbitWasmModule {
   add: (a: number, b: number) => number;
   hello_world: () => string;
+  calculate_satellite_position: (
+    time_seconds: number,
+    orbital_period: number,
+    orbital_radius: number,
+  ) => number[];
 }
