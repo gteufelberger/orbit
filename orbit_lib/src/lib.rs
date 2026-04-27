@@ -53,10 +53,11 @@ fn keplerian_to_eci(
     let mean_anomaly = mean_anomaly_epoch + n * (time_unix - epoch_unix);
 
     let ecc_anomaly = solve_kepler(mean_anomaly, eccentricity);
-    let true_anomaly = 2.0 * f64::atan2(
-        (1.0 + eccentricity).sqrt() * (ecc_anomaly / 2.0).sin(),
-        (1.0 - eccentricity).sqrt() * (ecc_anomaly / 2.0).cos(),
-    );
+    let true_anomaly = 2.0
+        * f64::atan2(
+            (1.0 + eccentricity).sqrt() * (ecc_anomaly / 2.0).sin(),
+            (1.0 - eccentricity).sqrt() * (ecc_anomaly / 2.0).cos(),
+        );
 
     let r = semi_major_axis * (1.0 - eccentricity * ecc_anomaly.cos());
     let x_pf = r * true_anomaly.cos();
@@ -95,7 +96,16 @@ fn keplerian_to_ecef(
     time_unix: f64,
 ) -> [f64; 3] {
     eci_to_ecef(
-        keplerian_to_eci(semi_major_axis, eccentricity, inclination, raan, arg_periapsis, mean_anomaly_epoch, epoch_unix, time_unix),
+        keplerian_to_eci(
+            semi_major_axis,
+            eccentricity,
+            inclination,
+            raan,
+            arg_periapsis,
+            mean_anomaly_epoch,
+            epoch_unix,
+            time_unix,
+        ),
         time_unix,
     )
 }
@@ -162,9 +172,27 @@ pub fn calculate_orbit_path(
     for i in 0..=num_points {
         let t = time_unix + (i as f64 / num_points as f64) * period;
         let pos = if inertial {
-            keplerian_to_eci(semi_major_axis, eccentricity, inclination, raan, arg_periapsis, mean_anomaly_epoch, epoch_unix, t)
+            keplerian_to_eci(
+                semi_major_axis,
+                eccentricity,
+                inclination,
+                raan,
+                arg_periapsis,
+                mean_anomaly_epoch,
+                epoch_unix,
+                t,
+            )
         } else {
-            keplerian_to_ecef(semi_major_axis, eccentricity, inclination, raan, arg_periapsis, mean_anomaly_epoch, epoch_unix, t)
+            keplerian_to_ecef(
+                semi_major_axis,
+                eccentricity,
+                inclination,
+                raan,
+                arg_periapsis,
+                mean_anomaly_epoch,
+                epoch_unix,
+                t,
+            )
         };
         result.push(pos[0]);
         result.push(pos[1]);
