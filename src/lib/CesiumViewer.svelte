@@ -79,6 +79,9 @@
 
       viewer = new Cesium.Viewer(container, {});
 
+      viewer.clock.multiplier = 400;
+      viewer.clock.shouldAnimate = true;
+
       // Satellite position using Keplerian mechanics
       const satellite = viewer.entities.add({
         position: new Cesium.CallbackPositionProperty(
