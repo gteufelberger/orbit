@@ -80,7 +80,7 @@
       viewer = new Cesium.Viewer(container, {});
 
       // Satellite position using Keplerian mechanics
-      viewer.entities.add({
+      const satellite = viewer.entities.add({
         position: new Cesium.CallbackPositionProperty(
           () => {
             const t = cesiumTimeToUnix(viewer.clock.currentTime);
@@ -106,6 +106,8 @@
           outlineWidth: 2,
         },
       });
+
+      viewer.selectedEntity = satellite;
 
       // Orbit path: recalculated each tick so ECEF positions stay correct
       viewer.entities.add({
