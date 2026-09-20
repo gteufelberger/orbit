@@ -1,6 +1,6 @@
 <script lang="ts">
   import CesiumViewer from "$lib/CesiumViewer.svelte";
-  import Controls from "$lib/Controls.svelte";
+  import Sidebar from "$lib/Sidebar.svelte";
 
   let leftSidebarWidth = $state(150);
   let isDragging = $state(false);
@@ -27,13 +27,7 @@
 
 <div class="split-container">
   <div style={`width: ${leftSidebarWidth}px`}>
-    <a
-      class="source-link"
-      href="https://github.com/gteufelberger/orbit"
-      target="_blank"
-      rel="noopener noreferrer">Source</a
-    >
-    <Controls />
+    <Sidebar />
   </div>
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <div class="divider" onmousedown={handleMouseDown}></div>
