@@ -34,7 +34,7 @@
     "typescript-eslint": "^8.58.1",
     "vite": "^8.0.7",
     "vite-plugin-cesium-build": "^0.7.4",
-    "wasm-pack": "^0.14.0"
+    "wasm-pack": "^0.15.0"
   },
   "dependencies": {
     "cesium": "^1.140.0"
