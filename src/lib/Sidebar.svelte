@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Controls from "./Controls.svelte";
 </script>
 
