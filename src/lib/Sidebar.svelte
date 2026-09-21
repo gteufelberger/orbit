@@ -1,5 +1,6 @@
 <script lang="ts">
   import Controls from "./Controls.svelte";
+  import SatelliteList from "./SatelliteList.svelte";
 </script>
 
 <a
@@ -10,3 +11,4 @@
 >
 
 <Controls />
+<SatelliteList />
