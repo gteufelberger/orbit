@@ -3,6 +3,6 @@
   import SatelliteHolder from "./SatelliteHolder.svelte";
 </script>
 
-{#each sim.satellites as satellite (satellite.id)}
-  <SatelliteHolder {satellite} />
+{#each sim.satellites as satellite, index (satellite.id)}
+  <SatelliteHolder {satellite} result={sim.result?.satellites[index]} />
 {/each}

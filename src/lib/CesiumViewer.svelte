@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { asset } from "$app/paths";
   import * as Cesium from "cesium";
   import "cesium/Build/Cesium/Widgets/widgets.css";
   import { sim } from "$lib/simulation.svelte";
@@ -16,13 +17,10 @@
     Cesium.Color.MAGENTA,
   ];
 
-  /**
-   * How often the clock is published to shared state, in milliseconds.
-   *
-   * onTick fires every frame, but the plots only need enough resolution to move
-   * the marker smoothly; republishing at 60 Hz would re-render them for
-   * sub-pixel changes.
-   */
+  /** Past this camera distance, show points instead of overlapping meshes. */
+  const model_visible_within_meters = 3.0e7;
+
+  /** onTick fires every frame; the plots do not need 60 Hz. */
   const clock_publish_interval_ms = 100;
   let last_published_ms = 0;
 
@@ -34,8 +32,6 @@
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIzMWZmY2E5Zi00OWQ0LTRhMjgtYTBkNS00MWQ5YTMyNTMyNTIiLCJpZCI6NDE5OTUzLCJpYXQiOjE3NzY1MjE2NTV9.TH0VeihQtFm8F0nwQoGJZSj3lKCUE9v9KAsL00mXPVI";
     viewer = new Cesium.Viewer(container, {});
 
-    // The viewer owns the clock, so the current time only ever flows outwards:
-    // the plots read it, nothing writes it back.
     const stop_listening = viewer.clock.onTick.addEventListener((clock) => {
       const now_ms = performance.now();
       if (now_ms - last_published_ms < clock_publish_interval_ms) return;
@@ -57,8 +53,8 @@
     sim.current_unix_seconds = Cesium.JulianDate.toDate(time).getTime() / 1000;
   }
 
-  // Rebuild the scene whenever a new simulation lands. There is no per-tick
-  // work: the sampled positions below let Cesium interpolate on its own clock.
+  // Cesium interpolates the sampled positions on its own clock, so there is no
+  // per-tick work: rebuild only when a new simulation lands.
   $effect(() => {
     const result = sim.result;
     if (!viewer || viewer.isDestroyed() || !result) return;
@@ -78,20 +74,37 @@
       new Cesium.JulianDate(),
     );
 
-    result.satellites.forEach((satellite, index) => {
+    sim.satellites.forEach((satellite, index) => {
+      const satellite_result = result.satellites[index];
+      if (!satellite_result) return;
+
       const color = orbit_colors[index % orbit_colors.length];
-      const position = sampled_position(satellite, result, start);
+      const position = sampled_position(satellite_result, result, start);
 
       viewer.entities.add({
         id: satellite.id,
         name: satellite.name,
         position,
         orientation: new Cesium.VelocityOrientationProperty(position),
+        model: {
+          uri: asset(`/models/${satellite.model}.glb`),
+          // Metre-scale craft seen from hundreds of km would render sub-pixel.
+          minimumPixelSize: 48,
+          maximumScale: 50000,
+          distanceDisplayCondition: new Cesium.DistanceDisplayCondition(
+            0.0,
+            model_visible_within_meters,
+          ),
+        },
         point: {
           pixelSize: 10,
           color,
           outlineColor: Cesium.Color.BLACK,
           outlineWidth: 1,
+          distanceDisplayCondition: new Cesium.DistanceDisplayCondition(
+            model_visible_within_meters,
+            Number.MAX_VALUE,
+          ),
         },
         label: {
           text: satellite.name,
@@ -118,8 +131,6 @@
     viewer.clock.shouldAnimate = true;
     viewer.timeline?.zoomTo(start, stop);
 
-    // Publish immediately so the plot markers snap to the new window's start
-    // rather than waiting for the throttle window to elapse.
     publish_clock(viewer.clock.currentTime);
   }
 

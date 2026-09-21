@@ -1,13 +1,12 @@
 <script lang="ts">
-  import type { Satellite } from "$bindings/Satellite";
-  import { sim } from "$lib/simulation.svelte";
+  import type { SatelliteResult } from "$bindings/SatelliteResult";
+  import { sim, type DisplaySatellite } from "$lib/simulation.svelte";
   import TelemetryPlot from "./TelemetryPlot.svelte";
 
-  let { satellite }: { satellite: Satellite } = $props();
-
-  let result = $derived(
-    sim.result?.satellites.find((entry) => entry.id === satellite.id),
-  );
+  let {
+    satellite,
+    result,
+  }: { satellite: DisplaySatellite; result?: SatelliteResult } = $props();
 </script>
 
 <section>
