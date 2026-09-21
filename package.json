@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite dev",
     "build:wasm": "wasm-pack build orbit_lib --target web --out-dir ../src/lib/wasm/pkg",
+    "watch:wasm": "cd orbit_lib && bacon wasm",
     "build": "bun run build:wasm && vite build",
     "preview": "vite preview",
     "prepare": "svelte-kit sync || echo ''",
@@ -26,6 +27,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-svelte": "^3.17.0",
     "globals": "^17.4.0",
+    "layerchart": "^2.5.0",
     "prettier": "^3.8.1",
     "prettier-plugin-svelte": "^3.5.1",
     "svelte": "^5.55.2",

@@ -11,6 +11,9 @@ const config = {
     adapter: adapter({
       fallback: "index.html",
     }),
+    alias: {
+      $bindings: "orbit_lib/bindings",
+    },
   },
 };
 
