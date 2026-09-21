@@ -66,7 +66,7 @@
 
   figcaption {
     font-size: 0.75em;
-    color: #666;
+    color: var(--fg-dim);
     margin-bottom: 0.2em;
   }
 
@@ -74,5 +74,16 @@
   .plot {
     height: 90px;
     font-size: 0.65em;
+    color: var(--fg-dim);
+  }
+
+  /* LayerChart ships no CSS, so axis text and ticks default to black. */
+  .plot :global(text) {
+    fill: currentColor;
+  }
+
+  .plot :global(.lc-axis-tick-group line) {
+    stroke: currentColor;
+    opacity: 0.4;
   }
 </style>

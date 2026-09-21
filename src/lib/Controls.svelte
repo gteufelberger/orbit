@@ -34,15 +34,33 @@
 </details>
 
 <style>
-  .primary {
+  button {
     width: 100%;
-    padding: 0.5em;
+    padding: 0.45em;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--raised);
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  button:hover:not(:disabled) {
+    border-color: var(--accent);
+  }
+
+  button:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+
+  .primary {
     font-weight: 600;
   }
 
   .error {
     margin: 0.5em 0;
-    color: #b00020;
+    color: #ff7a7a;
     font-size: 0.85em;
     overflow-wrap: anywhere;
   }
@@ -50,17 +68,16 @@
   hr {
     margin: 1em 0 0.5em;
     border: none;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid var(--line);
   }
 
   summary {
     cursor: pointer;
     font-size: 0.85em;
-    color: #666;
+    color: var(--fg-dim);
   }
 
   details button {
     margin-top: 0.4em;
-    width: 100%;
   }
 </style>

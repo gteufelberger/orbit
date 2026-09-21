@@ -28,7 +28,7 @@
 <style>
   section {
     padding: 0.5em 0;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--line);
   }
 
   h2 {
@@ -39,6 +39,6 @@
   .placeholder {
     margin: 0.3em 0 0;
     font-size: 0.75em;
-    color: #999;
+    color: var(--fg-dim);
   }
 </style>

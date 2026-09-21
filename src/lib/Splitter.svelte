@@ -2,7 +2,7 @@
   import type { Snippet } from "svelte";
 
   // Width of the left content
-  let left_width = $state(150);
+  let left_width = $state(300);
 
   // Left / right content from parent
   let {
@@ -54,11 +54,11 @@
 
   .divider {
     width: 8px;
-    background: #ccc;
+    background: #2b3546;
     cursor: col-resize;
   }
   .divider:hover {
-    background: #999;
+    background: #4a9eff;
   }
 
   .viewer-pane {
