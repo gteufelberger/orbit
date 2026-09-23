@@ -99,6 +99,27 @@ export const sim = $state({
         },
       ],
     },
+    {
+      name: "Sentinel 2B",
+      id: "sentinel-2b",
+      model: "generic",
+      tle: "1 42063U 17013A   26266.31938991  .00000098  00000-0  54015-4 0  9998\n2 42063  98.5710 339.6817 0001173  87.9132 272.2185 14.30815998498675",
+      components: [
+        {
+          kind: "SolarPanel",
+          id: "array",
+          area_square_meters: 7.1,
+          efficiency: 0.179,
+        },
+        {
+          kind: "Battery",
+          id: "main_battery",
+          capacity_watt_hours: 2940,
+          initial_state_of_charge: 0.9,
+          load_watts: 900,
+        },
+      ],
+    },
   ] as DisplaySatellite[],
   result: null as SimulationResult | null,
   /** Cesium's clock, published by the viewer so the plots can mark it. */
