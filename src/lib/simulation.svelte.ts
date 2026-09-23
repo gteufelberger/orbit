@@ -4,8 +4,14 @@ import { getWasm } from "$lib/wasm";
 
 const ORBIT_SECONDS = 99 * 60;
 
-/** A satellite plus the model file in `static/models/` to draw it with. */
-export type DisplaySatellite = Satellite & { model: string };
+/**
+ * A satellite plus the model file in `static/models/` to draw it with, and the
+ * across-track width of its imager, omitted when it does not carry one.
+ */
+export type DisplaySatellite = Satellite & {
+  model: string;
+  swath_meters?: number;
+};
 
 /**
  * Shared simulation state. Controls and CesiumViewer are not in an ancestor
@@ -19,6 +25,7 @@ export const sim = $state({
       name: "Landsat 9",
       id: "landsat9",
       model: "landsat",
+      swath_meters: 185_000,
       tle: "1 49260U 21088A   26264.47165275  .00000170  00000-0  47773-4 0  9997\n2 49260  98.2196 333.4388 0001506  93.9087 266.2284 14.57100580265024",
       components: [
         {
@@ -40,6 +47,7 @@ export const sim = $state({
       name: "FLEX",
       id: "flex",
       model: "generic",
+      swath_meters: 150_000,
       tle: "1 A0690U 26209B   26264.59238340  .00000241  00000-0  12522-3 0  9990\n2 A0690  98.6262 330.6436 0001976  88.7260 271.4146 14.23497854   911",
       components: [
         {
@@ -82,6 +90,7 @@ export const sim = $state({
       name: "Sentinel 3B",
       id: "sentinel-3b",
       model: "generic",
+      swath_meters: 1_270_000,
       tle: "1 43437U 18039A   26198.00000000  .00000000  00000+0 -28164-1 0 00014\n2 43437  98.6222 265.1030 0001295 123.2206 263.1193 14.26747824428387",
       components: [
         {
@@ -103,6 +112,7 @@ export const sim = $state({
       name: "Sentinel 2B",
       id: "sentinel-2b",
       model: "generic",
+      swath_meters: 290_000,
       tle: "1 42063U 17013A   26266.31938991  .00000098  00000-0  54015-4 0  9998\n2 42063  98.5710 339.6817 0001173  87.9132 272.2185 14.30815998498675",
       components: [
         {

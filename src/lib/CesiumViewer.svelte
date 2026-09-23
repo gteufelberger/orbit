@@ -79,7 +79,41 @@
       if (!satellite_result) return;
 
       const color = orbit_colors[index % orbit_colors.length];
-      const position = sampled_position(satellite_result, result, start);
+      const { orbit: position, ground } = sampled_positions(
+        satellite_result,
+        result,
+        start,
+      );
+
+      if (satellite.swath_meters) {
+        viewer.entities.add({
+          id: `${satellite.id}-swath`,
+          position: ground,
+          ellipse: {
+            semiMajorAxis: satellite.swath_meters / 2,
+            semiMinorAxis: satellite.swath_meters / 2,
+            material: color.withAlpha(0.2),
+            outline: true,
+            outlineColor: color.withAlpha(0.6),
+            height: 0,
+          },
+        });
+
+        // Both ends are already sampled properties, so the boresight follows
+        // them without a per-frame callback.
+        viewer.entities.add({
+          id: `${satellite.id}-boresight`,
+          polyline: {
+            positions: new Cesium.PositionPropertyArray([position, ground]),
+            width: 1.5,
+            arcType: Cesium.ArcType.NONE,
+            material: new Cesium.PolylineDashMaterialProperty({
+              color: color.withAlpha(0.7),
+              dashLength: 12,
+            }),
+          },
+        });
+      }
 
       viewer.entities.add({
         id: satellite.id,
@@ -135,26 +169,35 @@
   }
 
   /**
-   * Builds an interpolatable position track from the flat TEME samples.
+   * Builds the orbit track and the ground track beneath it.
    *
    * SGP4 produces TEME, which Cesium cannot use directly, so each sample is
-   * rotated into the Earth-fixed frame with Cesium's own TEME transform.
+   * rotated into the Earth-fixed frame with Cesium's own TEME transform. The
+   * ground point is that same sample dropped onto the ellipsoid, so the swath
+   * needs no per-frame work either.
    */
-  function sampled_position(
+  function sampled_positions(
     satellite: SatelliteResult,
     result: SimulationResult,
     start: Cesium.JulianDate,
-  ): Cesium.SampledPositionProperty {
-    const position = new Cesium.SampledPositionProperty();
-    position.setInterpolationOptions({
+  ): {
+    orbit: Cesium.SampledPositionProperty;
+    ground: Cesium.SampledPositionProperty;
+  } {
+    const interpolation = {
       interpolationDegree: 5,
       interpolationAlgorithm: Cesium.LagrangePolynomialApproximation,
-    });
+    };
+    const orbit = new Cesium.SampledPositionProperty();
+    const ground = new Cesium.SampledPositionProperty();
+    orbit.setInterpolationOptions(interpolation);
+    ground.setInterpolationOptions(interpolation);
 
     // The vectors are packed into numbers by addSample, so one scratch each is
     // enough. The JulianDate is kept by reference, so that one must be fresh.
     const teme = new Cesium.Cartesian3();
     const fixed = new Cesium.Cartesian3();
+    const surface = new Cesium.Cartesian3();
     const teme_to_fixed = new Cesium.Matrix3();
 
     for (let sample = 0; sample < result.sample_count; sample += 1) {
@@ -180,10 +223,14 @@
       }
 
       Cesium.Matrix3.multiplyByVector(teme_to_fixed, teme, fixed);
-      position.addSample(time, fixed);
+      orbit.addSample(time, fixed);
+
+      if (Cesium.Ellipsoid.WGS84.scaleToGeodeticSurface(fixed, surface)) {
+        ground.addSample(time, surface);
+      }
     }
 
-    return position;
+    return { orbit, ground };
   }
 </script>
 
