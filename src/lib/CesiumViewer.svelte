@@ -117,7 +117,7 @@
           material: color,
           // Only the orbit already flown: one full orbit behind, nothing ahead.
           leadTime: 0,
-          trailTime: 6000,
+          trailTime: 60 * 60 * 12,
           resolution: result.step_seconds,
         }),
       });
